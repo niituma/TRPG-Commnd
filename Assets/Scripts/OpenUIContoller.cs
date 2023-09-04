@@ -10,11 +10,13 @@ public class OpenUIContoller : MonoBehaviour
     {
         _charaPalams.alpha = 1.0f;
         _charaPalams.interactable = true;
+        _charaPalams.blocksRaycasts = true;
     }
 
     public void CloseUI()
     {
         _charaPalams.alpha = 0.0f;
         _charaPalams.interactable = false;
+        _charaPalams.blocksRaycasts = false;
     }
 }

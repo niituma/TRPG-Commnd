@@ -15,8 +15,14 @@ public class TextController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(TypeText(_text));
+        SetText(_text);
     }
+
+    public void SetText(string text)
+    {
+        StartCoroutine(TypeText(text));
+    }
+
 
     IEnumerator TypeText(string text)
     {
