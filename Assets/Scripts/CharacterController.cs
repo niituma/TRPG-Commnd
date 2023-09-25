@@ -1,10 +1,15 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
 public partial class CharacterController : MonoBehaviour
 {
+    [SerializeField]
+    HPController[] enemyControllers;
+
     [SerializeField]
     CharacterPalameter _thisPalam;
 
@@ -12,13 +17,16 @@ public partial class CharacterController : MonoBehaviour
     static readonly AttackState _attackState = new AttackState();
 
     CharaStateBase _currentState;
+    HPController _thisHP;
     Button _actionButton;
 
     public CharacterPalameter ThisPalam { get => _thisPalam; }
+    public HPController[] EnemyControllers { get => enemyControllers; }
 
     private void Awake()
     {
         _actionButton = GetComponent<Button>();
+        _thisHP = GetComponent<HPController>();
 
         _currentState = _actionState;
 
@@ -35,4 +43,6 @@ public partial class CharacterController : MonoBehaviour
         nextState.OnEnter(this, _currentState);
         _currentState = nextState;
     }
+
+    
 }
