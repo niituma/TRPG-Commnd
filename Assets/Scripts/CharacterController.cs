@@ -12,9 +12,15 @@ public partial class CharacterController : MonoBehaviour
 
     [SerializeField]
     CharacterPalameter _thisPalam;
+    [SerializeField]
+    CanvasGroup _selectButtons;
+    [SerializeField]
+    InGameSystem _gameSystem;
 
     static readonly ActionState _actionState = new ActionState();
     static readonly AttackState _attackState = new AttackState();
+
+    public CharaState _state;
 
     CharaStateBase _currentState;
     HPController _thisHP;
@@ -32,17 +38,43 @@ public partial class CharacterController : MonoBehaviour
 
         _actionButton.onClick.AddListener(() =>
         {
-            CharaStateBase state = _currentState == _actionState ? _attackState : _actionState;
-            ChangeState(state);
+            var a = _selectButtons.alpha == 0 ? 1 : 0;
+            var active = a == 0 ? false : true;
+            _selectButtons.interactable = active;
+            _selectButtons.alpha = a;
+            _gameSystem.SelectChara(this);
         });
     }
 
-    public void ChangeState(CharaStateBase nextState)
+    void ChangeState(CharaStateBase nextState)
     {
         _currentState.OnExit(this, nextState);
         nextState.OnEnter(this, _currentState);
         _currentState = nextState;
     }
+    public void ChangeState(CharaState nextState)
+    {
+        switch (nextState)
+        {
+            case CharaState.Action:
+                ChangeState(_actionState);
+                break;
+            case CharaState.Attack:
+                ChangeState(_attackState);
+                break;
+            case CharaState.Wait:
+                break;
+            default: 
+                break;
+        }
+    }
+}
 
-    
+public enum CharaState
+{
+    Wait,
+    Attack,
+    Action,
+
+    Dead
 }

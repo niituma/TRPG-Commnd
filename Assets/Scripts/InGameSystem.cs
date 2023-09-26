@@ -1,15 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InGameSystem : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    Button _attackButton;
+    [SerializeField]
+    Button _actionButton;
+
+    CharacterController _currentChara;
+
+    public void SelectChara(CharacterController chara)
     {
-        
+        _currentChara = chara;
+        SetCharaActiveButton(_currentChara);
     }
 
+    void SetCharaActiveButton(CharacterController chara)
+    {
+        _attackButton.onClick.AddListener(() => chara.ChangeState(CharaState.Attack));
+
+        _actionButton.onClick.AddListener(() => chara.ChangeState(CharaState.Action));
+    }
     IEnumerator StartEvent()
     {
 
