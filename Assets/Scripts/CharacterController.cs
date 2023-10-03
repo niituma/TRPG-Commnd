@@ -13,8 +13,6 @@ public partial class CharacterController : MonoBehaviour
     [SerializeField]
     CharacterPalameter _thisPalam;
     [SerializeField]
-    CanvasGroup _selectButtons;
-    [SerializeField]
     InGameSystem _gameSystem;
 
     static readonly ActionState _actionState = new ActionState();
@@ -35,17 +33,23 @@ public partial class CharacterController : MonoBehaviour
         _thisHP = GetComponent<HPController>();
 
         _currentState = _actionState;
+        
 
         _actionButton.onClick.AddListener(() =>
         {
-            var a = _selectButtons.alpha == 0 ? 1 : 0;
+            var a = _gameSystem.SelectButtons.alpha == 0 ? 1 : 0;
             var active = a == 0 ? false : true;
-            _selectButtons.interactable = active;
-            _selectButtons.alpha = a;
-            _gameSystem.SelectChara(this);
+            _gameSystem.SelectButtons.interactable = active;
+            _gameSystem.SelectButtons.alpha = a;
+
+            var chara = a == 0 ? null : this;
+            _gameSystem.SelectChara(chara);
         });
     }
-
+    public void RateJudge(float rate,float value,float time)
+    {
+        _gameSystem.RateJudge(rate, value, time);
+    }
     void ChangeState(CharaStateBase nextState)
     {
         _currentState.OnExit(this, nextState);

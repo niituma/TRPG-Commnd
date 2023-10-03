@@ -6,6 +6,20 @@ public class OpenUIContoller : MonoBehaviour
 {
     [SerializeField]
     CanvasGroup _charaPalams;
+
+    /// <summary>
+    /// ˆø”‚ÌCanvasGroup‚Ìİ’è‚·‚é
+    /// </summary>
+    /// <param name="canvasGroup"></param>
+    /// <param name="alpha"></param>
+    /// <param name="interactable"></param>
+    /// <param name="blocksRaycasts"></param>
+    public void SetCanvasUI(CanvasGroup canvasGroup, float alpha, bool interactable, bool blocksRaycasts)
+    {
+        canvasGroup.alpha = alpha;
+        canvasGroup.interactable = interactable;
+        canvasGroup.blocksRaycasts = blocksRaycasts;
+    }
     public void OpenUI()
     {
         _charaPalams.alpha = 1.0f;
