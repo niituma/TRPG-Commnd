@@ -7,14 +7,13 @@ public partial class CharacterController
 {
     public class AttackState : CharaStateBase
     {
-
         int _successRate = 60;
         float _viewTime = 0.5f;
 
         public override void OnEnter(CharacterController chara, CharaStateBase state)
         {
-            chara._state = CharaState.Attack;
-            Debug.Log(chara._state);
+            chara.State = CharaState.Attack;
+            Debug.Log(chara.State);
 
             var value = Random.Range(1, 100);
             chara.RateJudge(_successRate, value, _viewTime);
@@ -23,8 +22,10 @@ public partial class CharacterController
             .AppendInterval(_viewTime)
             .AppendCallback(() =>
             {
-                if (_successRate >= value) { chara.EnemyControllers[0].Damage(chara.ThisPalam.Power); }
+                if (_successRate >= value) { chara._currentTarget.ThisHP.Damage(chara.ThisPalam.Power); }
                 else { Debug.Log("MISS"); }
+
+                chara.ChangeState(CharaState.Wait);
             });
         }
         public override void OnUpdate(CharacterController chara, CharaStateBase state)

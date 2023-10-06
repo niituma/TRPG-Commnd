@@ -8,8 +8,8 @@ public partial class CharacterController
     {
         public override void OnEnter(CharacterController chara, CharaStateBase state)
         {
-            chara._state = CharaState.Action;
-            Debug.Log(chara._state);
+            chara.State = CharaState.Action;
+            Debug.Log(chara.State);
         }
         public override void OnUpdate(CharacterController chara, CharaStateBase state)
         {

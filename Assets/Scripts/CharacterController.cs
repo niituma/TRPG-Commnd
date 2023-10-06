@@ -1,15 +1,14 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public partial class CharacterController : MonoBehaviour
 {
-    [SerializeField]
-    HPController[] enemyControllers;
-
     [SerializeField]
     CharacterPalameter _thisPalam;
     [SerializeField]
@@ -18,37 +17,24 @@ public partial class CharacterController : MonoBehaviour
     static readonly ActionState _actionState = new ActionState();
     static readonly AttackState _attackState = new AttackState();
 
-    public CharaState _state;
+    public CharaState State;
 
+    [SerializeField]
+    CharacterController _currentTarget;
     CharaStateBase _currentState;
-    HPController _thisHP;
-    Button _actionButton;
+    public HPController ThisHP { get; private set; }
 
     public CharacterPalameter ThisPalam { get => _thisPalam; }
-    public HPController[] EnemyControllers { get => enemyControllers; }
 
     private void Awake()
     {
-        _actionButton = GetComponent<Button>();
-        _thisHP = GetComponent<HPController>();
-
+        ThisHP = GetComponent<HPController>();
+        ThisHP.OnDead += () => { ChangeState(CharaState.Dead); };
         _currentState = _actionState;
-        
-
-        _actionButton.onClick.AddListener(() =>
-        {
-            var a = _gameSystem.SelectButtons.alpha == 0 ? 1 : 0;
-            var active = a == 0 ? false : true;
-            _gameSystem.SelectButtons.interactable = active;
-            _gameSystem.SelectButtons.alpha = a;
-
-            var chara = a == 0 ? null : this;
-            _gameSystem.SelectChara(chara);
-        });
     }
-    public void RateJudge(float rate,float value,float time)
+    public void RateJudge(float rate, float value, float time)
     {
-        _gameSystem.RateJudge(rate, value, time);
+        _gameSystem.RateJudge(rate, value, time, this);
     }
     void ChangeState(CharaStateBase nextState)
     {
@@ -67,8 +53,12 @@ public partial class CharacterController : MonoBehaviour
                 ChangeState(_attackState);
                 break;
             case CharaState.Wait:
+                State = CharaState.Wait;
                 break;
-            default: 
+            case CharaState.Dead:
+                State = CharaState.Dead;
+                break;
+            default:
                 break;
         }
     }
@@ -77,6 +67,7 @@ public partial class CharacterController : MonoBehaviour
 public enum CharaState
 {
     Wait,
+    AttackStandby,
     Attack,
     Action,
 

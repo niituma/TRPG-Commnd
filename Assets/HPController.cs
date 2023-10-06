@@ -4,7 +4,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HPController : MonoBehaviour
+public class HPController : MonoBehaviour, IDamageble
 {
     [SerializeField]
     Slider _HPSlider;
@@ -14,6 +14,7 @@ public class HPController : MonoBehaviour
     BoolReactiveProperty _isdead = new BoolReactiveProperty(false);
 
     public bool IsDead { get => _isdead.Value; }
+    public Action OnDead;
 
     float _currentHP;
 
@@ -21,6 +22,12 @@ public class HPController : MonoBehaviour
     void Start()
     {
         _currentHP = _MaxHPValue;
+
+        OnDead += () =>
+        {
+            GetComponent<CanvasGroup>().DOFade(0, 0.5f).OnComplete(() => this.gameObject.SetActive(false));
+        };
+        
 
         _isdead.Where(x => true).Subscribe(enable =>
         {
@@ -38,9 +45,5 @@ public class HPController : MonoBehaviour
         _currentHP -= damage;
         if (_currentHP <= 0) { _isdead.Value = true; }
         _HPSlider.value = _currentHP / _MaxHPValue;
-    }
-    public void OnDead()
-    {
-        GetComponent<CanvasGroup>().DOFade(0, 0.5f).OnComplete(() => this.gameObject.SetActive(false));
     }
 }
