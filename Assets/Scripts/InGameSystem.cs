@@ -21,7 +21,7 @@ public class InGameSystem : MonoBehaviour
 
     public CanvasGroup SelectButtons { get => _selectButtons; private set => _selectButtons = value; }
 
-    private void Awake()
+    private void Start()
     {
         _charaJudgeBar.Canvas.alpha = 0;
         _enemyJudgeBar.Canvas.alpha = 0;
