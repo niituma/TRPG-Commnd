@@ -6,21 +6,15 @@ using UnityEngine.UI;
 public class InGameSystem : MonoBehaviour
 {
     [SerializeField] OpenUIContoller _openUIContoller;
-
+    [SerializeField] ButtleCommndCtrl _commnd;
     [SerializeField]
     List<ExplorerController> _explorers;
     [SerializeField]
     List<EnemyController> _enemise;
 
     [SerializeField] CanvasGroup _selectButtons;
-    [SerializeField]
-    Button _attackButton;
-    [SerializeField]
-    Button _actionButton;
-    [SerializeField]
-    JudgeTextContoller _charaJudgeBar;
-    [SerializeField]
-    JudgeTextContoller _enemyJudgeBar;
+    [SerializeField] Button _attackButton;
+    [SerializeField] Button _actionButton;
 
     ExplorerController _currentExplorer;
     Coroutine _buttleCorotine;
@@ -29,23 +23,7 @@ public class InGameSystem : MonoBehaviour
 
     private void Start()
     {
-        _charaJudgeBar.Canvas.alpha = 0;
-        _enemyJudgeBar.Canvas.alpha = 0;
         _buttleCorotine = StartCoroutine(RunButtleEventAsync());
-    }
-
-    public void RateJudge(float a, float b, float time, CharacterController chara)
-    {
-        if (chara is ExplorerController)
-        {
-            _charaJudgeBar.Canvas.alpha = 1;
-            _charaJudgeBar.RateJudgeView(a, b, time);
-        }
-        else if (chara is EnemyController)
-        {
-            _enemyJudgeBar.Canvas.alpha = 1;
-            _enemyJudgeBar.RateJudgeView(a, b, time);
-        }
     }
     public void SelectChara(ExplorerController chara)
     {
@@ -55,6 +33,8 @@ public class InGameSystem : MonoBehaviour
 
     void SetCharaActiveButton(CharacterController chara)
     {
+        ResetSelectButton();
+
         if (chara == null)
         {
             _attackButton.onClick.RemoveAllListeners();
@@ -65,14 +45,12 @@ public class InGameSystem : MonoBehaviour
         {
             chara.ChangeState(CharaState.Attack);
             _selectButtons.interactable = false;
-            ResetSelectButton();
         });
 
         _actionButton.onClick.AddListener(() =>
         {
             chara.ChangeState(CharaState.Action);
             _selectButtons.interactable = false;
-            ResetSelectButton();
         });
     }
 
@@ -139,8 +117,6 @@ public class InGameSystem : MonoBehaviour
             if (CheckButtleFinish()) { break; }
         }
 
-        _enemyJudgeBar.Canvas.alpha = 0;
-
         yield return null;
     }
 
@@ -150,7 +126,8 @@ public class InGameSystem : MonoBehaviour
         SelectButtons.alpha = 1;
         foreach (var c in _explorers)
         {
-            if(c.State == CharaState.Dead) { continue; }
+            if (c.State is not CharaState.Dead and not CharaState.Wait) { Debug.LogError($"ëIëíÜÇÃ{c.name}Ç™ë“ã@èÛë‘Ç≈ÇÕÇ†ÇËÇ‹ÇπÇÒÅB"); }
+            if (c.State == CharaState.Dead) { continue; }
             _selectButtons.interactable = true;
             SelectChara(c);
             yield return WaitCharaState(c, CharaState.Wait);
@@ -162,7 +139,6 @@ public class InGameSystem : MonoBehaviour
         SelectButtons.alpha = 0;
 
         yield return new WaitForSecondsRealtime(2f);
-        _charaJudgeBar.Canvas.alpha = 0;
 
         yield return null;
     }

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,13 @@ public partial class CharacterController
         {
             chara.State = CharaState.Action;
             Debug.Log(chara.State);
+
+            DOTween.Sequence()
+            .AppendInterval(0.5f)
+            .AppendCallback(() =>
+            {
+                chara.ChangeState(CharaState.Wait);
+            });
         }
         public override void OnUpdate(CharacterController chara, CharaStateBase state)
         {

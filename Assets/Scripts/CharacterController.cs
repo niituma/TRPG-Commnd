@@ -9,18 +9,16 @@ using UnityEngine.UI;
 
 public partial class CharacterController : MonoBehaviour
 {
-    [SerializeField]
-    CharacterPalameter _thisPalam;
-    [SerializeField]
-    InGameSystem _gameSystem;
+    [SerializeField] CharacterPalameter _thisPalam;
+    [SerializeField] InGameSystem _gameSystem;
+    [SerializeField] OpenUIContoller _openUIContoller;
 
     static readonly ActionState _actionState = new ActionState();
     static readonly AttackState _attackState = new AttackState();
 
     public CharaState State;
 
-    [SerializeField]
-    CharacterController _currentTarget;
+    [SerializeField] CharacterController _currentTarget;
     CharaStateBase _currentState;
     public HPController ThisHP { get; private set; }
 
@@ -31,10 +29,6 @@ public partial class CharacterController : MonoBehaviour
         ThisHP = GetComponent<HPController>();
         ThisHP.OnDead += () => { ChangeState(CharaState.Dead); };
         _currentState = _actionState;
-    }
-    public void RateJudge(float rate, float value, float time)
-    {
-        _gameSystem.RateJudge(rate, value, time, this);
     }
     void ChangeState(CharaStateBase nextState)
     {

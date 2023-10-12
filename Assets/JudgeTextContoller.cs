@@ -23,6 +23,8 @@ public class JudgeTextContoller : MonoBehaviour
     /// <param name="time">Œ‹‰Ê•\¦ŠÔ</param>
     public void RateJudgeView(float rate, float value,float time)
     {
+        Canvas.alpha = 1;
+
         _text.text = $"¬Œ÷—¦:{rate} † ";
         DOTween.Sequence()
             .AppendInterval(time)

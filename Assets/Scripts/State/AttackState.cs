@@ -16,7 +16,7 @@ public partial class CharacterController
             Debug.Log(chara.State);
 
             var value = Random.Range(1, 100);
-            chara.RateJudge(_successRate, value, _viewTime);
+            chara._openUIContoller.RateJudge(_successRate, value, _viewTime, chara);
 
             DOTween.Sequence()
             .AppendInterval(_viewTime)
