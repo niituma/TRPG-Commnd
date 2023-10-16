@@ -8,11 +8,12 @@ public class JudgeTextContoller : MonoBehaviour
 {
     [SerializeField]
     TextMeshProUGUI _text;
-    public CanvasGroup Canvas { get; private set; }
+    CanvasGroup _canvas;
 
     private void Awake()
     {
-        Canvas = GetComponent<CanvasGroup>();
+        _canvas = GetComponent<CanvasGroup>();
+        _canvas.alpha = 0;
     }
 
     /// <summary>
@@ -23,7 +24,7 @@ public class JudgeTextContoller : MonoBehaviour
     /// <param name="time">åãâ ï\é¶éûä‘</param>
     public void RateJudgeView(float rate, float value,float time)
     {
-        Canvas.alpha = 1;
+        _canvas.alpha = 1;
 
         _text.text = $"ê¨å˜ó¶:{rate} ÅÜ ";
         DOTween.Sequence()
@@ -32,5 +33,10 @@ public class JudgeTextContoller : MonoBehaviour
             {
                 _text.text += $"{value}";
             });
+    }
+
+    public void ViewHidden()
+    {
+        _canvas.alpha = 0;
     }
 }

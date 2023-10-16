@@ -1215,7 +1215,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 882578306}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: OpenUIContoller, Assembly-CSharp
         m_MethodName: CloseUI
         m_Mode: 1
@@ -1374,7 +1374,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _thisPalam: {fileID: 11400000, guid: 2fdf1b080592e724ca7313ec2d523347, type: 2}
-  _gameSystem: {fileID: 882578307}
   State: 0
   _currentTarget: {fileID: 1839905519}
   enemyControllers:
@@ -1491,8 +1490,10 @@ GameObject:
   m_Component:
   - component: {fileID: 882578305}
   - component: {fileID: 882578304}
-  - component: {fileID: 882578306}
   - component: {fileID: 882578307}
+  - component: {fileID: 882578310}
+  - component: {fileID: 882578309}
+  - component: {fileID: 882578308}
   m_Layer: 0
   m_Name: System
   m_TagString: Untagged
@@ -1530,19 +1531,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &882578306
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 882578303}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa3e3a344299fa6439274f4aaf9094fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _charaPalams: {fileID: 2114660779}
 --- !u!114 &882578307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1555,17 +1543,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af7b497dce9ae0a4f9e3b5b5f007b62f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _openUIContoller: {fileID: 882578306}
+  _commnd: {fileID: 882578310}
+  _attackUI: {fileID: 882578309}
   _explorers:
   - {fileID: 765349600}
   - {fileID: 1124348819}
   _enemise:
   - {fileID: 1839905519}
+--- !u!114 &882578308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 882578303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa3e3a344299fa6439274f4aaf9094fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _charaPalams: {fileID: 765349601}
+--- !u!114 &882578309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 882578303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59ef8fbed2e6cd74982bd7adc944d05d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _charaJudgeBar: {fileID: 1300457524}
+  _enemyJudgeBar: {fileID: 42487369}
+--- !u!114 &882578310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 882578303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48cfad5c55ac48947bd4e0ca37454d3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _selectButtons: {fileID: 1800236526}
   _attackButton: {fileID: 2110692543}
   _actionButton: {fileID: 1186049231}
-  _charaJudgeBar: {fileID: 1300457524}
-  _enemyJudgeBar: {fileID: 42487369}
 --- !u!1 &948584017
 GameObject:
   m_ObjectHideFlags: 0
@@ -1900,7 +1926,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _thisPalam: {fileID: 11400000, guid: 2fdf1b080592e724ca7313ec2d523347, type: 2}
-  _gameSystem: {fileID: 882578307}
   State: 0
   _currentTarget: {fileID: 1839905519}
   enemyControllers:
@@ -1930,7 +1955,7 @@ GameObject:
   - component: {fileID: 1154196202}
   - component: {fileID: 1154196201}
   m_Layer: 5
-  m_Name: Button (2)
+  m_Name: NoneButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2052,7 +2077,7 @@ GameObject:
   - component: {fileID: 1186049232}
   - component: {fileID: 1186049231}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: ActionButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3452,7 +3477,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _thisPalam: {fileID: 11400000, guid: 2fdf1b080592e724ca7313ec2d523347, type: 2}
-  _gameSystem: {fileID: 882578307}
   State: 0
   _currentTarget: {fileID: 765349600}
 --- !u!225 &1839905520
@@ -3798,7 +3822,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 882578306}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: OpenUIContoller, Assembly-CSharp
         m_MethodName: OpenUI
         m_Mode: 1
@@ -4064,7 +4088,7 @@ GameObject:
   - component: {fileID: 2110692544}
   - component: {fileID: 2110692543}
   m_Layer: 5
-  m_Name: Button
+  m_Name: AttackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

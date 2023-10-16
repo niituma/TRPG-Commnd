@@ -5,21 +5,13 @@ using UnityEngine.UI;
 
 public class InGameSystem : MonoBehaviour
 {
-    [SerializeField] OpenUIContoller _openUIContoller;
     [SerializeField] ButtleCommndCtrl _commnd;
-    [SerializeField]
-    List<ExplorerController> _explorers;
-    [SerializeField]
-    List<EnemyController> _enemise;
-
-    [SerializeField] CanvasGroup _selectButtons;
-    [SerializeField] Button _attackButton;
-    [SerializeField] Button _actionButton;
+    [SerializeField] ViewAttackUI _attackUI;
+    [SerializeField] List<ExplorerController> _explorers;
+    [SerializeField] List<EnemyController> _enemise;
 
     ExplorerController _currentExplorer;
     Coroutine _buttleCorotine;
-
-    public CanvasGroup SelectButtons { get => _selectButtons; private set => _selectButtons = value; }
 
     private void Start()
     {
@@ -28,41 +20,8 @@ public class InGameSystem : MonoBehaviour
     public void SelectChara(ExplorerController chara)
     {
         _currentExplorer = chara;
-        SetCharaActiveButton(_currentExplorer);
+        _commnd.SetCharaActiveButton(_currentExplorer);
     }
-
-    void SetCharaActiveButton(CharacterController chara)
-    {
-        ResetSelectButton();
-
-        if (chara == null)
-        {
-            _attackButton.onClick.RemoveAllListeners();
-            return;
-        }
-
-        _attackButton.onClick.AddListener(() =>
-        {
-            chara.ChangeState(CharaState.Attack);
-            _selectButtons.interactable = false;
-        });
-
-        _actionButton.onClick.AddListener(() =>
-        {
-            chara.ChangeState(CharaState.Action);
-            _selectButtons.interactable = false;
-        });
-    }
-
-    /// <summary>
-    /// セレクトボタンを非表示、押したときの処理も削除
-    /// </summary>
-    private void ResetSelectButton()
-    {
-        _attackButton.onClick.RemoveAllListeners();
-        _actionButton.onClick.RemoveAllListeners();
-    }
-
     IEnumerator RunButtleEventAsync()
     {
         while (true)
@@ -79,31 +38,27 @@ public class InGameSystem : MonoBehaviour
             yield return AttackEvent();
             if (CheckButtleFinish()) { Debug.Log("戦闘終了"); break; }
         }
+
         yield return null;
     }
 
     bool CheckButtleFinish()
     {
-        bool isfnish = true;
+        bool deadPlayer = true;
+        bool deadEnemy = true;
 
         foreach (CharacterController ex in _explorers)
         {
-            if (ex.State != CharaState.Dead) { isfnish = false; break; }
+            if (ex.State != CharaState.Dead) { deadPlayer = false; break; }
         }
 
         foreach (CharacterController e in _enemise)
         {
-            if (e.State != CharaState.Dead) { isfnish = false; break; }
-            isfnish = true;
+            if (e.State != CharaState.Dead) { deadEnemy = false; break; }
         }
 
-        if (isfnish)
-        {
-            StopCoroutine(_buttleCorotine);
-            _buttleCorotine = null;
-        }
 
-        return isfnish;
+        return deadPlayer || deadEnemy;
     }
 
     IEnumerator EnemyAttackEvent()
@@ -112,31 +67,31 @@ public class InGameSystem : MonoBehaviour
         {
             if (e.State == CharaState.Dead) { continue; }
             e.ChangeState(CharaState.Attack);
+            _attackUI.RateJudge(e._successRate, e._currentRateValue, 0.5f, e);
             yield return WaitCharaState(e, CharaState.Wait);
             yield return new WaitForSecondsRealtime(1.5f);//アニメーションでステート変更すれば消すかも
-            if (CheckButtleFinish()) { break; }
+            if (_enemise[_enemise.Count - 1] == e) { _attackUI.ViewHiddenJudgeBar(e); }
+            if (CheckButtleFinish()) { _attackUI.ViewHiddenJudgeBar(e); break; }
         }
-
         yield return null;
     }
 
     IEnumerator AttackEvent()
     {
-        SelectButtons.interactable = true;
-        SelectButtons.alpha = 1;
         foreach (var c in _explorers)
         {
             if (c.State is not CharaState.Dead and not CharaState.Wait) { Debug.LogError($"選択中の{c.name}が待機状態ではありません。"); }
             if (c.State == CharaState.Dead) { continue; }
-            _selectButtons.interactable = true;
+            _commnd.ViewCommndButtonActive(true);
             SelectChara(c);
             yield return WaitCharaState(c, CharaState.Wait);
-            if (CheckButtleFinish()) { break; }
+            if (c.State is CharaState.Attack) { _attackUI.RateJudge(c._successRate, c._currentRateValue, 0.5f, c); }
             yield return new WaitForSecondsRealtime(1f);//アニメーションでステート変更すれば消すかも
+            if (_explorers[_explorers.Count - 1] == c) { _attackUI.ViewHiddenJudgeBar(c); }
+            if (CheckButtleFinish()) { _attackUI.ViewHiddenJudgeBar(c); break; }
         }
 
-        SelectButtons.interactable = false;
-        SelectButtons.alpha = 0;
+        _commnd.ViewCommndButtonActive(false);
 
         yield return new WaitForSecondsRealtime(2f);
 

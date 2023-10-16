@@ -7,18 +7,6 @@ public class OpenUIContoller : MonoBehaviour
 {
     [SerializeField] CanvasGroup _charaPalams;
 
-    [SerializeField] CanvasGroup _selectButtons;
-    [SerializeField] Button _attackButton;
-    [SerializeField] Button _actionButton;
-    [SerializeField] JudgeTextContoller _charaJudgeBar;
-    [SerializeField] JudgeTextContoller _enemyJudgeBar;
-
-    private void Start()
-    {
-        _charaJudgeBar.Canvas.alpha = 0;
-        _enemyJudgeBar.Canvas.alpha = 0;
-    }
-
     /// <summary>
     /// à¯êîÇÃCanvasGroupÇÃê›íËÇ∑ÇÈ
     /// </summary>
@@ -49,19 +37,5 @@ public class OpenUIContoller : MonoBehaviour
         _charaPalams.alpha = 0.0f;
         _charaPalams.interactable = false;
         _charaPalams.blocksRaycasts = false;
-    }
-
-    public void RateJudge(float a, float b, float time, CharacterController chara)
-    {
-        if (chara is ExplorerController)
-        {
-            _charaJudgeBar.Canvas.alpha = 1;
-            _charaJudgeBar.RateJudgeView(a, b, time);
-        }
-        else if (chara is EnemyController)
-        {
-            _enemyJudgeBar.Canvas.alpha = 1;
-            _enemyJudgeBar.RateJudgeView(a, b, time);
-        }
     }
 }

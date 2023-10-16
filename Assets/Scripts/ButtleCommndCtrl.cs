@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Windows.Input;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +31,20 @@ public class ButtleCommndCtrl : MonoBehaviour
             chara.ChangeState(CharaState.Action);
             _selectButtons.interactable = false;
         });
+    }
+
+    public void ViewCommndButtonActive(bool active)
+    {
+        if (active)
+        {
+            _selectButtons.interactable = true;
+            _selectButtons.alpha = 1;
+        }
+        else
+        {
+            _selectButtons.interactable = false;
+            _selectButtons.alpha = 0;
+        }
     }
 
     /// <summary>

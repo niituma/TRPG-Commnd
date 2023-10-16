@@ -5,9 +5,11 @@ using UnityEngine;
 
 public partial class CharacterController
 {
+    public int _successRate { get; private set; } = 60; //パラメーターから所得するかもしれないから仮で書いた
+    public int _currentRateValue { get; private set; } = 0;
     public class AttackState : CharaStateBase
     {
-        int _successRate = 60;
+        
         float _viewTime = 0.5f;
 
         public override void OnEnter(CharacterController chara, CharaStateBase state)
@@ -15,14 +17,13 @@ public partial class CharacterController
             chara.State = CharaState.Attack;
             Debug.Log(chara.State);
 
-            var value = Random.Range(1, 100);
-            chara._openUIContoller.RateJudge(_successRate, value, _viewTime, chara);
+            chara._currentRateValue = Random.Range(1, 100);
 
             DOTween.Sequence()
             .AppendInterval(_viewTime)
             .AppendCallback(() =>
             {
-                if (_successRate >= value) { chara._currentTarget.ThisHP.Damage(chara.ThisPalam.Power); }
+                if (chara._successRate >= chara._currentRateValue) { chara._currentTarget.ThisHP.Damage(chara.ThisPalam.Power); }
                 else { Debug.Log("MISS"); }
 
                 chara.ChangeState(CharaState.Wait);

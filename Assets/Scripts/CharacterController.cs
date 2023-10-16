@@ -10,8 +10,6 @@ using UnityEngine.UI;
 public partial class CharacterController : MonoBehaviour
 {
     [SerializeField] CharacterPalameter _thisPalam;
-    [SerializeField] InGameSystem _gameSystem;
-    [SerializeField] OpenUIContoller _openUIContoller;
 
     static readonly ActionState _actionState = new ActionState();
     static readonly AttackState _attackState = new AttackState();
